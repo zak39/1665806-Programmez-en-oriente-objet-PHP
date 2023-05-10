@@ -24,14 +24,23 @@ class Encounter
 
 class Player
 {
-    public int $level;
+    public function __construct(private int $level)
+    {
+    }
+
+    public function __set($name, $value): void
+    {
+        $this->{$name} = $value;
+    }
+
+    public function __get($name): mixed
+    {
+        return $this->{$name};
+    }
 }
 
-$greg = new Player;
-$jade = new Player;
-
-$greg->level = 400;
-$jade->level = 800;
+$greg = new Player(400);
+$jade = new Player(800);
 
 echo sprintf(
         'Greg à %.2f%% chance de gagner face a Jade',
