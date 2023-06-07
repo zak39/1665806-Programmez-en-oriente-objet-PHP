@@ -68,6 +68,22 @@ class Player
     }
 }
 
+class QueuingPlayer extends Player
+{
+    public function __construct(public Player $player, protected int $range = 1)
+    {
+        parent::__construct($player->getName(), $player->getRatio());
+    }
+
+    public function setRange(int $range) {
+        $this->range = $range;
+    }
+
+    public function getRange() {
+        return $this->range;
+    }
+}
+
 $greg = new Player('greg', 400);
 $jade = new Player('jade', 476);
 
