@@ -41,7 +41,7 @@ class Lobby
     }
 }
 
-abstract class AbstractPlayer
+abstract class AbastractPlayer
 {
     public function __construct(public string $name = 'anonymous', public float $ratio = 400.0)
     {
@@ -49,26 +49,27 @@ abstract class AbstractPlayer
 
     abstract public function getName(): string;
 
-    abstract public function getRatio(): float;
-
     abstract protected function probabilityAgainst(self $player): float;
 
     abstract public function updateRatioAgainst(self $player, int $result): void;
+
+    abstract public function getRatio(): float;
 }
 
-class Player extends AbstractPlayer
+class Player extends AbastractPlayer
 {
+
     public function getName(): string
     {
         return $this->name;
     }
 
-    protected function probabilityAgainst(AbstractPlayer $player): float
+    protected function probabilityAgainst(AbastractPlayer $player): float
     {
         return 1 / (1 + (10 ** (($player->getRatio() - $this->getRatio()) / 400)));
     }
 
-    public function updateRatioAgainst(AbstractPlayer $player, int $result): void
+    public function updateRatioAgainst(AbastractPlayer $player, int $result): void
     {
         $this->ratio += 32 * ($result - $this->probabilityAgainst($player));
     }
@@ -77,11 +78,12 @@ class Player extends AbstractPlayer
     {
         return $this->ratio;
     }
+
 }
 
 class QueuingPlayer extends Player
 {
-    public function __construct(AbstractPlayer $player, protected int $range = 1)
+    public function __construct(AbastractPlayer $player, protected int $range = 1)
     {
         parent::__construct($player->getName(), $player->getRatio());
     }
@@ -97,6 +99,9 @@ class QueuingPlayer extends Player
     }
 }
 
+// Les "erreurs" sont normales.
+// Il manque le ratio mais il y a une valeur par défaut
+// dans notre __construct() depuis AbstractPlayer.
 $greg = new Player('greg');
 $jade = new Player('jade');
 
