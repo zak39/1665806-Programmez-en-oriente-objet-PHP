@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\MatchMaker;
+namespace App\MatchMaker;
 
-use App\Domain\MatchMaker\Player\InLobbyPlayerInterface;
-use App\Domain\MatchMaker\Player\PlayerInterface;
-use App\Domain\MatchMaker\Player\QueuingPlayer;
+use App\MatchMaker\Player\InLobbyPlayerInterface;
+use App\MatchMaker\Player\PlayerInterface;
+use App\MatchMaker\Player\QueuingPlayer;
 
 interface LobbyInterface
 {
@@ -26,8 +26,4 @@ interface LobbyInterface
     public function removePlayer(PlayerInterface $player): void;
 
     public function addPlayer(PlayerInterface $player): void;
-
-    public function createEncounterForPlayer(InLobbyPlayerInterface $player): void;
-
-    public function createEncounters(): void;
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\MatchMaker\Player;
 
-class Player extends AbstractPlayer
+class Player extends AbstractPlayer implements PlayerInterface
 {
     public function getName(): string
     {
