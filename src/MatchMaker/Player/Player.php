@@ -25,12 +25,12 @@ class Player extends AbstractPlayer implements PlayerInterface
         return 1 / (1 + (10 ** (($player->getRatio() - $this->getRatio()) / 400)));
     }
 
-    public function updateRatioAgainst(AbstractPlayer $player, int $result): void
+    public function updateRatioAgainst(PlayerInterface $player, int $result): void
     {
         $this->ratio += 32 * ($result - $this->probabilityAgainst($player));
     }
 
-    public function getRatio(): float
+    public function getRatio(): ?float
     {
         return $this->ratio;
     }

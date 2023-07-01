@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace App\MatchMaker\Player;
 
-use App\MatchMaker\Player\AbstractPlayer;
-
-class QueuingPlayer extends Player implements QueuingPlayerInterface
+class QueuingPlayer extends Player implements InLobbyPlayerInterface
 {
     public function __construct(PlayerInterface $player, protected int $range = 1)
     {
