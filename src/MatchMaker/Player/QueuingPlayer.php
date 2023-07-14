@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace App\MatchMaker\Player;
 
-class QueuingPlayer extends Player implements InLobbyPlayerInterface
+class QueuingPlayer implements InLobbyPlayerInterface
 {
-    public function __construct(PlayerInterface $player, protected int $range = 1)
+    public function __construct(public PlayerInterface $player, protected int $range = 1)
     {
-        parent::__construct($player->getName(), $player->getRatio());
     }
 
     public function getRange(): int

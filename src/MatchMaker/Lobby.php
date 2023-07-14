@@ -21,15 +21,15 @@ class Lobby
     /** @var array<QueuingPlayer> */
     public array $queuingPlayers = [];
 
-    public function findOponents(QueuingPlayer $player): array
+    public function findOponents(QueuingPlayer $queuingPlayer): array
     {
-        $minLevel = round($player->getRatio() / 100);
-        $maxLevel = $minLevel + $player->getRange();
+        $minLevel = round($queuingPlayer->player->getRatio() / 100);
+        $maxLevel = $minLevel + $queuingPlayer->getRange();
 
-        return array_filter($this->queuingPlayers, static function (QueuingPlayer $potentialOponent) use ($minLevel, $maxLevel, $player) {
-            $playerLevel = round($potentialOponent->getRatio() / 100);
+        return array_filter($this->queuingPlayers, static function (QueuingPlayer $potentialOponent) use ($minLevel, $maxLevel, $queuingPlayer) {
+            $playerLevel = round($potentialOponent->player->getRatio() / 100);
 
-            return $player !== $potentialOponent && ($minLevel <= $playerLevel) && ($playerLevel <= $maxLevel);
+            return $queuingPlayer !== $potentialOponent && ($minLevel <= $playerLevel) && ($playerLevel <= $maxLevel);
         });
     }
 
