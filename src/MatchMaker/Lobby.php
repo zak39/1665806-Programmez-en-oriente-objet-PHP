@@ -17,6 +17,8 @@ use App\Domain\MatchMaker\Encounter\Encounter;
 use App\Domain\MatchMaker\Player\InLobbyPlayerInterface;
 use App\Domain\MatchMaker\Player\PlayerInterface;
 use App\Domain\MatchMaker\Player\QueuingPlayer;
+use App\Domain\Exceptions\EncounterLengthException;
+use App\Domain\Exceptions\LobbingErrorException;
 
 class Lobby implements LobbyInterface
 {
@@ -50,7 +52,7 @@ class Lobby implements LobbyInterface
             }
         }
 
-        trigger_error('Ce joueur ne se trouve pas dans le lobby', E_USER_ERROR);
+        throw new LobbingErrorException();
     }
 
     public function isPlaying(PlayerInterface $player): bool
@@ -66,9 +68,13 @@ class Lobby implements LobbyInterface
 
     public function removePlayer(PlayerInterface $player): void
     {
-        $queuingPlayer = $this->isInLobby($player);
+        try {
+            $queuingPlayer = $this->isInLobby($player);
+            unset($this->queuingPlayers[array_search($queuingPlayer, $this->queuingPlayers, true)]);
+        } catch (LobbingErrorException $e) {
+            print($e->getMessage());
+        }
 
-        unset($this->queuingPlayers[array_search($queuingPlayer, $this->queuingPlayers, true)]);
     }
 
     public function addPlayer(PlayerInterface $player): void
@@ -104,7 +110,7 @@ class Lobby implements LobbyInterface
     public function createEncounters(): void
     {
         if (2 > \count($this->queuingPlayers)) {
-            trigger_error('Le nombre de joueurs est insuffisant pour créer une rencontre :(', E_USER_ERROR);
+            throw new EncounterLengthException();
         }
 
         foreach ($this->queuingPlayers as $key => $player) {
