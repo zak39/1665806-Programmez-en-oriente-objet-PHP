@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Domain\MatchMaker;
 
+use App\Domain\Exceptions\NotEnoughPlayersException;
+use App\Domain\Exceptions\NotFoundPlayersException;
 use App\Domain\MatchMaker\Encounter\Encounter;
 use App\Domain\MatchMaker\Player\InLobbyPlayerInterface;
 use App\Domain\MatchMaker\Player\PlayerInterface;
 use App\Domain\MatchMaker\Player\QueuingPlayer;
-use App\Domain\Exceptions\EncounterLengthException;
-use App\Domain\Exceptions\LobbingErrorException;
 
 class Lobby implements LobbyInterface
 {
@@ -52,7 +52,7 @@ class Lobby implements LobbyInterface
             }
         }
 
-        throw new LobbingErrorException();
+        throw new NotFoundPlayersException();
     }
 
     public function isPlaying(PlayerInterface $player): bool
@@ -70,11 +70,11 @@ class Lobby implements LobbyInterface
     {
         try {
             $queuingPlayer = $this->isInLobby($player);
-            unset($this->queuingPlayers[array_search($queuingPlayer, $this->queuingPlayers, true)]);
-        } catch (LobbingErrorException $e) {
-            print($e->getMessage());
+        } catch (NotFoundPlayersException $e) {
+            throw new \Exception('You cannot remove a player that is not in the lobby.', 128, $e);
         }
-
+        
+        unset($this->queuingPlayers[array_search($queuingPlayer, $this->queuingPlayers, true)]);
     }
 
     public function addPlayer(PlayerInterface $player): void
@@ -110,7 +110,7 @@ class Lobby implements LobbyInterface
     public function createEncounters(): void
     {
         if (2 > \count($this->queuingPlayers)) {
-            throw new EncounterLengthException();
+            throw new NotEnoughPlayersException();
         }
 
         foreach ($this->queuingPlayers as $key => $player) {

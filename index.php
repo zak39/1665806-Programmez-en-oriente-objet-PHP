@@ -19,7 +19,6 @@ spl_autoload_register(static function ($fqcn): void {
 use App\Domain\MatchMaker\Encounter\Score;
 use App\Domain\MatchMaker\Lobby;
 use App\Domain\MatchMaker\Player\Player;
-use App\Domain\Exceptions\EncounterLengthException;
 
 $greg = new Player('greg');
 $chuckNorris = new Player('Chuck Norris', 3000);
@@ -29,12 +28,7 @@ $lobby->addPlayer($greg);
 $lobby->addPlayer($chuckNorris);
 
 while (count($lobby->queuingPlayers)) {
-    try {
-        $lobby->createEncounters();
-    } catch (EncounterLengthException $e) {
-        print($e->getMessage() . PHP_EOL);
-        exit($e->getCode() . PHP_EOL);
-    }
+    $lobby->createEncounters();
 }
 
 $encounter = end($lobby->encounters);
